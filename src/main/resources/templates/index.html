@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="/MisEstilos/EstilosLogin.css">
+</head>
+<body>
+    <body>
+        <div class="main" >
+            <div class="content-img"><img src="/Imagenes/EscudoMuniChiclayo.PNG">
+                <div ><strong>MUNICIPALIDAD PROVINCIAL DE CHICLAYO</strong></div><br>
+                <div>Sistema de emision de carnet de discapacidad y registro para el programa contigo</div>
+            </div>
+            <div class="content-form">
+                <form action="/InicioDeSesion" method="post">
+                    <div><input class="text" type="text" name="usuario" placeholder="Usuario"></div>
+                    <div><input class="text" type="password" name="contraseña" placeholder="Contraseña"></div>
+                    <div th:if="${error}" style="color:red" >Credenciales Incorrectas</div>
+                    <div><input class="buton" type="submit" value="Ingresar"></div>
+                </form>
+
+            </div>
+        </div>    
+    </body>
+</body>
+</html>

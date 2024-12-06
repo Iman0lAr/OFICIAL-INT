@@ -1,0 +1,35 @@
+.main{
+    width: 400px;
+    margin: auto;
+}
+.content-img{
+    text-align: center;
+    margin-top: 50px;
+    margin-bottom: 20px;
+}
+.content-img div:nth-child(2){
+   font-weight: bold;
+}
+img{
+    width: 200px;
+}
+.text{
+    width: 100%;
+    height: 50px;
+    margin: 10px 0px 10px 0px;
+    padding-left: 10px;
+    border: rgb(51, 45, 71) 1px solid ;
+}
+.buton{
+    width: 103%;
+    height: 50px;
+    margin: 10px 0px 10px 0px;
+    background-color: #17A2B9;
+    border: none;
+    color: white;
+}
+
+.buton:hover{
+    background-color: #0e5a67;
+    cursor:pointer;
+}

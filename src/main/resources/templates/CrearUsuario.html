@@ -1,0 +1,185 @@
+ <html xmlns:th="http://www.thymeleaf.org">
+<html>
+    <head>
+        <title>TODO supply a title</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}">
+        <link rel="stylesheet" href="/MisEstilos/EstilosCUsuario.css">
+        <link rel="stylesheet" href="/MisEstilos/EstilosNavbar.css">
+        
+    </head>
+    <body>
+        
+        <header th:replace="~{Componentes/Header::cabezera}" ></header>
+         <aside th:replace="~{Componentes/Nabvar::nav_bar}"></aside>
+        
+        
+         
+    <div class="container content">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Nombre</th>
+                    <th scope="col">Correo</th>
+                    <th scope="col">Fecha Creacion</th>
+                    <th scope="col">Usuario creador</th>
+                    <th scope="col">Estado</th>
+                    <th scope="col">Modificar</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="usuario,stat : ${usuarios}">
+                    <th  th:text="${stat.index + 1}" scope="row"></th>
+                    <td  th:text="${usuario.persona.nombre + ' ' + usuario.persona.apell_paterno + ' ' + usuario.persona.apell_materno}"></td>
+                    <td th:text="${usuario.usuario}">Otto</td>
+                    <td th:text="${usuario.fecha_c}" >
+                    <td th:text="${usuario.usuarioCreador.usuario}" >
+                    </td>
+                    <td>
+                        <span th:if="${usuario.estado}">Activo</span>
+                        <span th:unless="${usuario.estado}">Inactivo</span>
+                    </td>
+                    <td><button onclick="buscar(this)" type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal3">
+                       Cambiar contraseña
+                      </button>                     
+                        <input id="username_buscar" type="hidden" th:value="${usuario.usuario}" >
+                        <form action="/modificarEstado" method="POST" style="display: inline-block">
+                         <input  type="hidden" name="username" th:value="${usuario.usuario}">
+                        <button  type="submit" class="btn btn-primary" >
+                        <span th:if="${usuario.estado}">Inavilitar</span>
+                        <span th:unless="${usuario.estado}">Habilitar</span>
+                      </button>
+                        </form>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+          <div class="d-flex justify-content-end contenedor-btn">
+            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                Agregar
+            </button>
+          </div>    
+    </div>
+
+
+
+
+    <input id="conf" type="checkbox" th:checked="${mostrar_modal}" style="display:none">
+
+    <!-- Modal -->
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="exampleModalLabel">Registrar un nuevo Usuario</h1>
+                    <button id="boton_cierre" type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form onsubmit="return validar()" th:object="${persona}" th:action="@{/AgregarUsuario}" method="POST">
+                    <div class="modal-body">
+
+                        <div style="width: 80% ; margin: auto;">
+                            
+                             <span class="confir" th:if="${t_cuenta}">Esta persona ya cuenta con una cuenta registrada</span>
+                             <span class="confir" th:if="${conf_creacion}">Usuario Creado correctamente</span>
+                             
+                            <div class="row" style="display: flex;align-items: center;">
+                                <div class="col-7">
+                                    <label for="nombre">Ingrese su DNI</label>
+                                    <input id="dni" class="form-control mb-3 mt-3" type="text" th:field="*{documentoDeIdentidad.nro_documento}">
+                                </div>
+                                <div class="col-3" style="height: 58px;box-sizing: border-box; padding-top: 20px;">
+                                    <button onclick="consumir()" type="button" class="btn btn-primary">Buscar</button></div>
+                            </div>
+                            <span class="valida " id="vali_dni" >Debe Ingresar un dni</span>
+                            <label for="nombre">Nombres</label>
+                            <input id="nombre" class="form-control mb-3 mt-3" type="text" th:field="*{nombre}" >
+
+                            <label for="apellido_pat">Apellido paterno</label>
+                            <input id="apellido_pat" class="form-control mb-3 mt-3" type="text" readonly th:field="*{apell_paterno}">
+
+                            <label for="apellido_mat">Apellido materno</label>
+                            <input id="apellido_mat" class="form-control mb-3 mt-3" type="text" readonly th:field="*{apell_materno}">
+
+                            <label for="correo">Correo</label>
+                            <input id="correo" class="form-control mb-3 mt-3" type="text" readonly th:field="*{usuario.usuario}">
+
+                            <label for="contraseña">Ingrese su contraseña</label>
+                            <input id="password" class="form-control mb-3 mt-3" type="password" th:field="*{usuario.contraseña}">
+                            <span class="valida val_contra" >Las contraseñas no coinciden</span>
+                            <span class="valida " id="vali_contra1" >Debe ingresar una contraseña</span>
+                            
+                            <label for="contraseña">Confirmar contraseña</label>
+                            <input id="password2" class="form-control mb-3 mt-3" type="password">
+                            <span class="valida val_contra" >Las contraseñas no coinciden</span>
+                            <span class="valida " id="vali_contra2" >Debe confirmar contraseña</span>
+
+                            <span>Sexo</span>
+                            <select th:field="*{sexo.nom_sexo}" class="form-select mt-3 mb-3" aria-label="Default select example" id="sexo" >
+                                <option value=""> </option>
+                                <option value="Masculino">Masculino</option>
+                                <option value="Femenino">Femenino</option>
+                            </select>
+                            <span class="valida " id="vali_sex" > Debe escoger una opcion</span>
+
+                            <span>Tipo de usuario</span>
+                            <select name="tipo_uss" class="form-select mt-3 mb-3" aria-label="Default select example" id="tip_us" >
+                                <option value=""> </option>
+                                <option value="Admin">Admin</option>
+                                <option value="Comun">Comun</option>
+                            </select>
+                            <span class="valida " id="vali_Tipo_us" > Debe escoger una opcion</span>
+
+                        </div>
+                        <div class="container"><span class="valida " id="vali_per" > Falta datos de la persona</span></div>
+                    </div>
+                   
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                        <button type="submit" class="btn btn-primary">Crear usuario</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    
+  
+  <!-- Modal -->
+  <div class="modal fade" id="exampleModal3" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="exampleModalLabel">Modal title</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+          <form onsubmit="valdiar2()" action="/modificarUsuario" th:object="${usuarioUpdate}" method="POST">
+        <div class="modal-body">
+            <input type="hidden" th:field="*{usuario}" id="userNameUpdate" >
+           <label for="contraseña">Ingrese su contraseña</label>
+           <input  class="form-control mb-3 mt-3" th:field="*{contraseña}" type="password" id="contraUpdate1" >
+           <span class="valida validacion_contraUpdate" >Las contraseñas no coinciden</span>
+           <span class="valida " id="val_ContraUpdate">Debe ingresar una contraseña</span>
+                            
+           <label for="contraseña">Confirmar contraseña</label>
+           <input  class="form-control mb-3 mt-3" type="password" id="contraUpdate2">
+           <span class="valida validacion_contraUpdate" >Las contraseñas no coinciden</span>
+           <span class="valida "  id="val_ContraUpdate2" >Debe confirmar contraseña</span>
+        </div>
+        <div class="modal-footer">
+          <button type="submit"  class="btn btn-primary">Modificar</button>
+        </div>
+          </form>
+      </div>
+    </div>
+  </div>
+
+            
+      <script src="/MisScripts/script_GUsuarioss.js"></script>        
+      <script src="/MisScripts/script_Nabvar.js"></script> 
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.11.6/umd/popper.min.js"></script>      
+      <script src="/js/bootstrap.min.js"></script>
+    </body>
+</html>

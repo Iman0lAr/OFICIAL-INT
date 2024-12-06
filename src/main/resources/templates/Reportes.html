@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Municipalidad Provincial de Chiclayo</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <link rel="stylesheet" href="/MisEstilos/EstilosNavbar.css">
+   <link rel="stylesheet" href="/MisEstilos/EstilosRpts.css">
+</head>
+<body>
+    
+     <header th:replace="~{Componentes/Header::cabezera}" ></header>
+      <aside th:replace="~{Componentes/Nabvar::nav_bar}"></aside>
+    
+    <div class="container">
+        <main class="main-content">
+            <div class="content-header">
+                <h1>Filtrar por :</h1>
+            </div>
+
+            <div class="filters">
+                <div class="row">
+                    <div class="filter-item">
+                        <label for="distrito">Distrito</label>
+                        <select id="distrito">
+                            <option value="1">Seleccione distrito</option>
+                            <option value="2">Distrito 1</option>
+                            <option value="3">Distrito 2</option>
+                        </select>
+                    </div>
+
+                    <div class="filter-item">
+                        <label for="tramite">Tipo de trámite</label>
+                        <select id="tramite">
+                            <option value="1">Carnet</option>
+                            <option value="2">Otro trámite</option>
+                        </select>
+                    </div>
+
+                    <div class="filter-item">
+                        <label for="sexo">Sexo discapacitado</label>
+                        <select id="sexo">
+                            <option value="1">Seleccione sexo</option>
+                            <option value="2">Masculino</option>
+                            <option value="3">Femenino</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="filter-item">
+                        <label for="fecha_inicio">Fecha inicio</label>
+                        <input type="date" id="fecha_inicio">
+                    </div>
+
+                    <div class="filter-item">
+                        <label for="fecha_fin">Fecha fin</label>
+                        <input type="date" id="fecha_fin">
+                    </div>
+                </div>
+
+                <button class="btn-report">Generar reporte</button>
+            </div>
+        </main>
+    </div>
+
+    <script src="/MisScripts/script_Nabvar.js"></script>
+</body>
+</html>
+

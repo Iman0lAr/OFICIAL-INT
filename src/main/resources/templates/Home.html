@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <title>TODO supply a title</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}">
+        <link rel="stylesheet" href="/MisEstilos/EstilosNavbar.css">
+        <link rel="stylesheet" href="/MisEstilos/EstilosHome.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+        <link rel="stylesheet" href="/MisEstilos/EstilosSalidaModal.css">
+    </head>
+    <body style="padding: 0px;margin: 0px">
+       <header th:replace="~{Componentes/Header::cabezera}" ></header>
+       <aside th:replace="~{Componentes/Nabvar::nav_bar}"></aside>
+        
+        
+      <main class="main-content">
+            <div class="content-header">
+                <h1>Personas discapacitadas registradas en el día</h1>
+                <div class="search-bar">
+                    <label for="search">Buscar:</label>
+                    <input type="text" id="search" placeholder="Buscar...">
+                </div>
+            </div>
+
+            <!-- Tabla de registros -->
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>DISCAPACITADO</th>
+                        <th>REPRESENTANTE</th>
+                        <th>TIPO TRÁMITE</th>
+                        <th>INFORMACION</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Ejemplo de fila de la tabla, se agregarán dinámicamente -->
+              <!-- th:text="${persona.nombre} + ' ' + ${persona.apellido}"> -->
+                  <tr th:each="item,iterStat : ${lista}">
+                        <td th:text="${item.discapacitado.persona.nombre + ' ' + item.discapacitado.persona.apell_paterno + ' ' + item.discapacitado.persona.apell_materno}"></td>
+                        <td>
+                            <span th:if="${item.representante != null}" 
+                                  th:text="${item.representante.persona.nombre + ' ' + item.representante.persona.apell_paterno + ' ' + item.representante.persona.apell_materno}"></span>
+                            <span th:unless="${item.representante != null}">
+                                No se registro un representante
+                            </span>
+                        </td>
+                       <td th:text="${item.tramie.tipoTramite.id_tipo_tramite==1} ? 'Solicitud de carnet' : 'Programa contigo'" />
+                        <td>
+                            <button class="btn-mostrar" data-bs-toggle="modal" th:data-bs-target="'#modalInfo' + ${iterStat.index}">Mostrar mas</button>
+                            <a th:if="${session.uss.tipoUsuario.id_tipo_usuario == 1}" th:href="@{/gestionarTramite/{id}(id=${item.tramie.id_tramite})}" target="_blank" ><button type="button" class="btn btn-warning">Modificar</button></a>
+                        </td>
+                    </tr>
+
+                    <!-- Más filas aquí -->
+                </tbody>
+            </table>
+
+            <!-- Paginación -->
+            <div class="pagination">
+                <button class="prev">Anterior</button>
+                <span>1</span>
+                <span>2</span>
+                <span>3</span>
+                <span>...</span>
+                <span>10</span>
+                <button class="next">Siguiente</button>
+            </div>
+        </main>
+        
+       
+       
+       
+        <!-- Modal -->
+         <div th:each="elemento, iterStat : ${lista}">
+            <div class="modal fade" th:id="'modalInfo' + ${iterStat.index}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                 <div class="modal-dialog modal-xl">
+                     <div class="modal-content">
+                         <div class="modal-header">
+                             <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                         </div>
+                         <div class="modal-body">
+                    <div class="info-container">
+                        <h2>Ficha de Información</h2>
+
+                        
+                        <!-- Información Discapacitado -->
+                        <div style="display: flex;flex-wrap: wrap; gap: 15px;">
+                            <div class="info-box" style="width: auto;">
+                                <div class="info-group">
+                                    <h3>Información Discapacitado</h3>
+                                    <div style="display: flex; gap: 20px;">
+                                        <div style="width: 500px;">
+                                            <div class="info-item">
+                                                <span class="label">DNI:</span>
+                                                <span th:text="${elemento.discapacitado.persona.documentoDeIdentidad.nro_documento}" ></span>
+                                            </div>
+                                            <div class="info-item">
+                                                <span class="label">Nombre:</span>
+                                                <span th:text="${elemento.discapacitado.persona.nombre}"></span>
+                                            </div>
+                                            <div class="info-item">
+                                                <span class="label">Apellidos Paterno:</span>
+                                                <span th:text="${elemento.discapacitado.persona.apell_paterno}"></span>
+                                            </div>
+                                            <div class="info-item">
+                                                <span class="label">Apellidos Materno:</span>
+                                                <span th:text="${elemento.discapacitado.persona.apell_materno}" ></span>
+                                            </div>
+                                             <div class="info-item" th:if="${elemento.tramie.tipoTramite.id_tipo_tramite eq 2}">
+                                                <span class="label">Fecha nacimiento:</span>
+                                                <span th:text="${elemento.discapacitado.fecha_Nac}"></span>
+                                            </div>
+                                           
+                                            <div class="info-item">
+                                                <span class="label">Sexo:</span>
+                                                <span th:text="${elemento.discapacitado.persona.sexo.nom_sexo}" ></span>
+                                            </div>
+                                            
+                                            <div class="info-item">
+                                                <span class="label">Dirección:</span>
+                                                <span th:text="${elemento.direc_disc.calle}"  ></span>
+                                            </div>
+                                            <div class="info-item">
+                                                <span class="label">Distrito:</span>
+                                                <span th:text="${elemento.direc_disc.distrito.nom_distrito}" ></span>
+                                            </div>
+                                            <div class="info-item">
+                                                <span class="label">Provincia:</span>
+                                                <span th:text="${elemento.direc_disc.distrito.provincia.nom_ciudad}"  ></span>
+                                            </div>
+                                            <div class="info-item" th:if="${elemento.tramie.tipoTramite.id_tipo_tramite eq 2}">
+                                                <span class="label">Centro poblado:</span>
+                                                <span th:text="${elemento.direc_disc.centroPoblado}"></span> 
+                                            </div>
+                                             <div class="info-item" th:if="${elemento.tramie.tipoTramite.id_tipo_tramite eq 2}">
+                                                <span class="label">Referencia:</span>
+                                                <span th:text="${elemento.direc_disc.ref_direccion}"></span> 
+                                            </div>
+                                            <div class="info-item">
+                                                <span class="label">Departamento:</span>
+                                                <span th:text="${elemento.direc_disc.distrito.provincia.departamento.nom_departamento}" ></span>
+                                            </div>
+                                            <div class="info-item" th:if="${elemento.tramie.tipoTramite.id_tipo_tramite eq 1}">
+                                                <span class="label" style="font-weight: bold;">Dni Discapacitado</span>
+                                                <span></span>
+                                                <img  th:src="'data:image/jpeg;base64,' + ${elemento.copia_dni_disc}" alt="Imagen">
+                                            </div>
+                                        </div>
+                                        <div style="width: 500px;" th:if="${elemento.tramie.tipoTramite.id_tipo_tramite eq 2}" >
+                                              <div class="info-item" th:if="${elemento.tramie.tipoTramite.id_tipo_tramite eq 2}">
+                                                <span class="label">Pueblo indigena pertenecienite:</span>
+                                                <span th:text="${elemento.discapacitado.com_indigena}"></span>
+                                            </div>
+                                             <div class="info-item" th:if="${elemento.tramie.tipoTramite.id_tipo_tramite eq 2}">
+                                                <span class="label">Lengua originaria con la que se comunica:</span>
+                                                <span th:text="${elemento.discapacitado.len_originaria}"></span>
+                                            </div>
+                                             <div class="info-item" th:if="${elemento.tramie.tipoTramite.id_tipo_tramite eq 2}">
+                                                <span class="label">Autopersepcion:</span>
+                                                <span th:text="${elemento.discapacitado.autopercepcion}"></span>
+                                            </div>
+                                             <div class="info-item" th:if="${elemento.tramie.tipoTramite.id_tipo_tramite eq 2}">
+                                                <span class="label">Maximo nivel de estudios:</span>
+                                                <span th:text="${elemento.discapacitado.estudios.nivelEstudio.nom_nivel}"></span>
+                                                 <span th:text="${elemento.discapacitado.estudios.desc_estudios}"></span>
+                                            </div>
+                                            <div class="info-item" th:if="${elemento.tramie.tipoTramite.id_tipo_tramite eq 2}">
+                                                <span class="label">Telefono fijo:</span>
+                                                <span th:text="${elemento.discapacitado.tel_fijo}"></span>
+                                            </div>
+                                             <div class="info-item" th:if="${elemento.tramie.tipoTramite.id_tipo_tramite eq 2}">
+                                                <span class="label">Celular:</span>
+                                                <span th:text="${elemento.discapacitado.celular}"></span>
+                                            </div>
+                                             <div class="info-item" th:if="${elemento.tramie.tipoTramite.id_tipo_tramite eq 2}">
+                                                <span class="label">Correo</span>
+                                                <span th:text="${elemento.discapacitado.correo}"></span>
+                                            </div>
+                                             <div class="info-item" th:if="${elemento.tramie.tipoTramite.id_tipo_tramite eq 2}">
+                                                <span class="label">Manifiesta voluntad:</span>
+                                                <span th:text="${elemento.discapacitado.mani_voluntad} ? 'Si' : 'No'"></span>
+                                            </div>
+                                            <div class="info-item" th:if="${elemento.tramie.tipoTramite.id_tipo_tramite eq 2}">
+                                                <span class="label">Dificultad para ir a un banco:</span>
+                                                <span th:text="${elemento.discapacitado.difi_ir_banco} ? 'Si' : 'No'"></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- Más datos de Información Discapacitado -->
+                                </div>
+                            </div>
+
+                            <!-- Información del Representante -->
+                            <div class="info-box">
+                                <div class="info-group">
+                                    <h3>Información del Representante</h3>
+                                     <div class="info-item">
+                                                    <span class="label">DNI:</span>
+                                                    <span th:if="${elemento.representante != null}"  th:text="${elemento.representante.persona.documentoDeIdentidad.nro_documento}"></span>
+                                                    <span th:unless="${elemento.representante != null}"> ----</span>
+                                                </div>
+                                                <div class="info-item">
+                                                    <span class="label">Nombre:</span>
+                                                    <span th:if="${elemento.representante != null}"  th:text="${elemento.representante.persona.nombre}"></span>
+                                                    <span th:unless="${elemento.representante != null}"> ----</span>
+                                                </div>
+                                                <div class="info-item">
+                                                    <span class="label">Apellidos Paterno:</span>
+                                                    <span th:if="${elemento.representante != null}"  th:text="${elemento.representante.persona.apell_paterno}"></span>
+                                                    <span th:unless="${elemento.representante != null}"> ----</span>
+                                                </div>
+                                                <div class="info-item">
+                                                    <span class="label">Apellidos Materno:</span>
+                                                    <span th:if="${elemento.representante != null}"  th:text="${elemento.representante.persona.apell_materno}"></span>
+                                                    <span th:unless="${elemento.representante != null}"> ----</span>
+                                                </div>
+                                                <div class="info-item">
+                                                    <span class="label">Sexo:</span>
+                                                    <span th:if="${elemento.representante != null}"  th:text="${elemento.representante.persona.sexo.nom_sexo}"></span>
+                                                    <span th:unless="${elemento.representante != null}"> ----</span>
+                                                </div>
+                                                 <div class="info-item" th:if="${elemento.tramie.tipoTramite.id_tipo_tramite eq 2 && elemento.representante != null}">
+                                                <span class="label">Telefono celular:</span>
+                                                <span th:text="${elemento.representante.tel_fijo}"></span>
+                                                </div>
+                                                 <div class="info-item" th:if="${elemento.tramie.tipoTramite.id_tipo_tramite eq 2 && elemento.representante != null}">
+                                                <span class="label">Correo :</span>
+                                                <span th:text="${elemento.representante.correo}"></span>
+                                                </div>
+                                            
+                                             <div th:if="${elemento.tramie.tipoTramite.id_tipo_tramite eq 1}">
+                                                <div class="info-item">
+                                                    <span class="label">Dirección:</span>
+                                                    <span th:if="${elemento.representante != null}"  th:text="${elemento.direc_repre.calle}"></span>
+                                                    <span th:unless="${elemento.representante != null}"> ----</span>
+                                                </div>
+                                                <div class="info-item">
+                                                    <span class="label">Distrito:</span>
+                                                    <span th:if="${elemento.representante != null}"  th:text="${elemento.direc_repre.distrito.nom_distrito}"></span>
+                                                    <span th:unless="${elemento.representante != null}"> ----</span>
+                                                </div>
+                                                <div class="info-item">
+                                                    <span class="label">Provincia:</span>
+                                                    <span th:if="${elemento.representante != null}"  th:text="${elemento.direc_repre.distrito.provincia.nom_ciudad}"></span>
+                                                    <span th:unless="${elemento.representante != null}"> ----</span>
+                                                </div>
+                                                <div class="info-item">
+                                                    <span class="label">Departamento</span>
+                                                    <span th:if="${elemento.representante != null}"  th:text="${elemento.direc_repre.distrito.provincia.departamento.nom_departamento}"></span>
+                                                    <span th:unless="${elemento.representante != null}"> ----</span>
+                                                </div>
+                                                <div class="info-item">
+                                                    <span class="label" style="font-weight: bold;">DNI Representante</span>
+                                                    <span></span>
+                                                    <img th:src="'data:image/jpeg;base64,' + ${elemento.copia_dni_representante}" alt="Imagen">
+                                                </div>
+                                                </div>
+                                </div>
+                            </div>
+
+
+                            <!-- Segunda fila con Datos de contacto y Certificado de Discapacidad -->
+
+                            <div class="info-box" th:if="${elemento.tramie.contacto != null}" >
+                                 <div class="info-group">
+                                                <h3>Datos de contacto</h3>
+                                                <div class="info-item">
+                                                    <span class="label">Número de Teléfono:</span>
+                                                    <span th:text="${elemento.tramie.contacto.celular}" ></span>
+                                                </div>
+                                                <div class="info-item">
+                                                    <span class="label">Correo Electrónico:</span>
+                                                    <span th:text="${elemento.tramie.contacto.correo}"></span>
+                                                </div>
+                                            </div>
+                            </div>
+
+                            <!-- Certificado de Discapacidad -->
+                            <div class="info-box">
+                                <div class="info-group">
+                                    <h3>Certificado de Discapacidad</h3>
+                                    <div class="info-item">
+                                                    <span class="label">Número de Certificado:</span>
+                                                    <span th:text="${elemento.certificadoDeDiscapacidad.num_certificado}" ></span>
+                                                </div>
+                                                <div class="info-item">
+                                                    <span class="label">Fecha de Emisión:</span>
+                                                    <span th:text="${elemento.certificadoDeDiscapacidad.fecha_emision}" ></span>
+                                                </div>
+                                                <div class="info-item">
+                                                    <span class="label" style="font-weight: bold;">Certificado 1</span>
+                                                    <span></span>
+                                                    <img  th:src="'data:image/jpeg;base64,' + ${elemento.copia_cer1}" alt="Imagen">
+                                                </div>
+                                                <div class="info-item">
+                                                    <span class="label" style="font-weight: bold;">Certificado 2</span>
+                                                    <span></span>
+                                                    <img  th:src="'data:image/jpeg;base64,' + ${elemento.copia_cer2}" alt="Imagen">
+                                                </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                         <div class="modal-footer">
+                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                             <button type="button" class="btn btn-primary">Save changes</button>
+                         </div>
+                     </div>
+                 </div>
+             </div>
+         </div>     
+
+       
+       
+       
+       
+       
+        <script src="/MisScripts/script_Nabvar.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.11.6/umd/popper.min.js"></script>
+        <script th:src="@{/js/bootstrap.min.js}"></script>
+    </body>
+</html>

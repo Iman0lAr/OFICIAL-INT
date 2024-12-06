@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Municipalidad Provincial de Chiclayo</title>
+    <link rel="icon" href="../imagenes/Escudo_de_Chiclayo.PNG" type="image/x-icon"> 
+    <link rel="stylesheet" href="/MisEstilos/EstilosFormPC.css">
+    <link rel="stylesheet" href="/MisEstilos/EstilosNavbar.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    
+    <header th:replace="~{Componentes/Header::cabezera}" ></header>
+    <aside th:replace="~{Componentes/Nabvar::nav_bar}"></aside>
+    
+    <form action="/guardarProgramaContigo" th:object="${claseForm}" method="POST" enctype="multipart/form-data">
+    <div style="padding-top: 90px" class="contenedor-formulario">
+       
+        <h3 style=" padding-bottom: 15px;padding-left: 30px;">Registro de Personas para el programa contigo</h3></div>
+        <div class="contenedor-subformulario">
+            <div class="agrupador-cuadros">
+                <label for="tipo-documento">Tipo de Documento de Identidad</label>
+                <select name="tipo_documento" id="tipo-documento">
+                    <option value="" disabled selected>Seleccione una opción</option>
+                    <option value="dni">DNI</option>
+                    <option value="pasaporte">Pasaporte</option>
+                </select>
+            </div>
+            <div class="agrupador-cuadros">
+                <label>DNI</label>
+               <input type="text" th:field="*{documentoDeIdentidad.nro_documento}" name="dni">
+            </div>
+            <div class="agrupador-cuadros">
+                <button class="boton" type=" button">
+                    <i class="fas fa-search"></i> Buscar
+                </button>
+            </div>
+            <div class="agrupador-cuadros">
+                <label>Nombres</label>
+                <input type="text" th:field="*{persona_dis.nombre}" >
+            </div>
+            <div class="agrupador-cuadros">
+                <label>Apellido Paterno</label>
+                <input type="text" th:field="*{persona_dis.apell_paterno}" >
+            </div>
+            <div class="agrupador-cuadros">
+                <label>Apellido Materno</label>
+                <input type="text" th:field="*{persona_dis.apell_materno}" >
+            </div>
+            <div class="agrupador-cuadros">
+                <label for="tipo-sexo">Sexo</label>
+                 <input type="text" th:field="*{sexo.nom_sexo}" name="sexo">
+            </div>
+            <div class="agrupador-cuadros">
+                <label>Edad:</label>
+                <input type="text" name="edad">
+            </div>
+            <div class="agrupador-cuadros">
+                <label>Fecha de Nacimiento</label>
+                <input type="date" th:field="*{discapacitado.fecha_Nac}"  >
+            </div>
+            <div class="agrupador-cuadros">
+                <label>¿Pertenece a un Pueblo/Comunidad Indigena</label>
+                <input type="text" th:field="*{discapacitado.com_indigena}" >
+            </div>
+            <div class="agrupador-cuadros">
+                <label>¿Se comunica con alguna lengua originaria</label>
+                <input type="text" th:field="*{discapacitado.len_originaria}" >
+            </div>
+            <div class="agrupador-cuadros">
+                <label for="antepasado">Por su antepasados y de acuerdo a sus costumbres udtedes  se considera</label>
+                <select name="autoPersepcion" id="antepasado">
+                    <option value="" disabled selected>Seleccione una opción</option>
+                    <option value="Quechua">Quechua</option>
+                    <option value="Aymara">Aymara</option>
+                    <option value="Amazonia">Nativo de la amazonia</option>
+                    <option value="Blanco">Blanco</option>
+                    <option value="Mestizo">Mestizo</option>
+                    <option value="Afrodecendiente">Afrodecendiente</option>
+                    <option value="Otro">Otro</option>
+                    <option value="No">No sabe</option>
+                  
+                </select>
+            </div>
+            <div class="agrupador-cuadros">
+                <label for="tipo-sexo">¿Maximo nivel de estudios alcanzados</label>
+                <select name="nivelEstudio" id="tipo-sexo">
+                    <option value="" disabled selected>Seleccione una opción</option>
+          
+                    <option th:each="item : ${nivelEstudios}" th:value="${item.id_nivel}" th:text="${item.nom_nivel}"></option>
+                </select>
+            </div>
+            <div class="agrupador-cuadros">
+                <label>Especifique:</label>
+                <input type="text"  th:field="*{discapacitado.estudios.desc_estudios}" >
+            </div>
+            <div class="agrupador-cuadros2"  >
+            </div>
+        </div>
+        <div class="titulo-datos">
+           <h3> Direccion</h3>
+        </div>
+        <div class="contenedor-subformulario">
+            <div class="agrupador-cuadros">
+                <label for="Departamento">Departamento</label>
+                  <input type="text" th:field="*{departamento.nom_departamento}" >
+                
+            </div>
+            <div class="agrupador-cuadros">
+                <label >Provincia</label>
+                  <input type="text" th:field="*{provincia.nom_ciudad}" >               
+            </div>
+            <div class="agrupador-cuadros">
+                <label for="distritos">Distrito</label>
+                <input type="text" th:field="*{distrito.nom_distrito}" name="distrito">
+            </div>
+            <div class="agrupador-cuadros">
+                <label>Centro Poblado</label>
+                <input type="text" th:field="*{direccion.centroPoblado}">
+            </div>
+            <div class="agrupador-cuadros">
+                <label>Calle</label>
+                <input type="text" th:field="*{direccion.calle}">
+            </div>
+            <div class="agrupador-cuadros">
+                <label>Referencia</label>
+                <input type="text" th:field="*{direccion.ref_direccion}">
+            </div>
+            <div class="agrupador-cuadros">
+                <label>Telefono Fijo</label>
+                <input type="text" th:field="*{discapacitado.tel_fijo}">
+            </div>
+            <div class="agrupador-cuadros">
+                <label>Telefono Celular</label>
+                <input type="text" th:field="*{discapacitado.celular}">
+            </div>
+            <div class="agrupador-cuadros">
+                <label>Correo Electronico</label>
+                <input type="text" th:field="*{discapacitado.correo}">
+            </div>
+            <div class="agrupador-cuadros">
+               <label>Certificado de discapacidad parte 1</label>
+               <input  type="file" id="imagen3" name="copiaCerPart1" accept="image/*"  >
+                <span class="val" style="display: none" id="valid_cer1" >Campo obligatorio</span>
+            </div>
+            <div class="agrupador-cuadros">
+                <label>Certificado de discapacidad parte 2</label>
+                <input  type="file" id="imagen4" name="copiaCerPart2" accept="image/*"  >
+                <span class="val" style="display: none" id="valid_cer2" >Campo obligatorio</span>
+            </div>
+            <div class="agrupador-cuadros">
+                <label>Numero de Certificado</label>
+                <input type="text" th:field="*{certificadoDeDiscapacidad.num_certificado}" >
+            </div>
+            <div class="agrupador-cuadros">
+                <label>Fecha de Emision</label>
+                <input type="date" th:field="*{certificadoDeDiscapacidad.fecha_emision}">
+            </div>
+            <div class="agrupador-cuadros">
+                 
+                <label for="certificado">¿La persona con discapacidad severa manifiesta su voluntad?</label>
+                <div style="display:flex;gap:15px">
+               <input id="rad_activo" type="radio" th:field="*{discapacitado.mani_voluntad}"  value="1" >
+                <label  for="opcion1" >Si</label>
+                               
+                 <input id="rad_Inactivo" type="radio"  th:field="*{discapacitado.mani_voluntad}"  value="0" >
+                <label  for="opcion2">No</label></div></div>
+            
+              <div class="agrupador-cuadros">
+                <label for="certificado">¿La persona con discapacidad tiene dificultar para trasladarse a un banco?</label>
+                <div style="display:flex;gap:15px">
+                <input id="rad_activo" type="radio" th:field="*{discapacitado.difi_ir_banco}"  value="1" >
+                <label  for="opcion1" >Si</label>
+                               
+                 <input id="rad_Inactivo" type="radio"  th:field="*{discapacitado.difi_ir_banco}"  value="0" >
+                 <label  for="opcion2">No</label></div></div>
+            </div>
+            
+            </div>
+        </div>
+        <div class="titulo-datos">
+            <h3> Datos de la/el autorizada/o</h3>
+         </div>
+         <div class="contenedor-subformulario">
+           
+            <div class="agrupador-cuadros">
+                <label for="dni">DNI</label>
+                <input type="text" th:field="*{documentoDeIdentidad_repre.nro_documento}" >
+            </div>
+            <div class="agrupador-cuadros2">
+            </div>
+            <div class="agrupador-cuadros">
+                <label for="nombres">Nombres</label>
+                <input type="text" th:field="*{persona_repre.nombre}"  >
+            </div>
+            <div class="agrupador-cuadros">
+                <label for="apellido_paterno">Apellido Paterno</label>
+                <input type="text" id="apellido_paterno" th:field="*{persona_repre.apell_paterno}">
+            </div>
+            <div class="agrupador-cuadros">
+                <label for="apellido_materno">Apellido Materno</label>
+                <input type="text" id="apellido_materno" th:field="*{persona_repre.apell_materno}">
+            </div>
+              <div class="agrupador-cuadros">
+                <label for="apellido_materno">Sexo</label>
+                <input type="text" id="apellido_materno" th:field="*{sexo_repre.nom_sexo}">
+            </div>
+            <div class="agrupador-cuadros">
+                <label for="celular">Teléfono Celular</label>
+                <input type="text" id="celular" th:field="*{representante.tel_fijo}">
+            </div>
+            <div class="agrupador-cuadros">
+                <label for="correo">Correo Electrónico</label>
+                <input type="email" id="correo" th:field="*{representante.correo}" >
+            </div>
+            <div class="agrupador-cuadros">
+                <label for="tipo-relacion">Parentesco</label>
+                <select name="parentesco" id="tipo-relacion">
+                    <option value="" disabled selected>Seleccione una opción</option>
+                    <option th:each="item : ${parentescos}" th:value="${item.id_tipo_relacion}" th:text="${item.nom_tipo_relacion}"></option>
+                </select>
+            </div>
+            <div class="agrupador-cuadros">
+                <label>Adjunte informe de condición social</label>
+                <input  type="file" id="imagen4" name="informeCondificonLegal" accept="image/*"  >
+            </div>
+            <div class="agrupador-cuadros2">
+            </div>
+            <div class="agrupador-cuadros">
+                <label for="archivo" class="upload-label">Hoja parte 1</label>
+                <input type="file" name="hoja1" class="upload-input" />
+            </div>
+             <div class="agrupador-cuadros">
+                <label for="archivo" class="upload-label">Hoja parte 2</label>
+                <input type="file"  name="hoja2"  class="upload-input" />
+            </div>
+            <div class="agrupador-cuadros2">
+            </div>
+            <div class="agrupador-cuadros2">
+            </div>
+        </div>
+        <div class="estilo-btn">
+            <button type="submit" class="btn-guardar">
+                Guardar
+            </button>
+            <button type="button" class="btn-cancelar">
+                <i class="fas fa-times"></i> Cancelar
+            </button>
+        </div>
+    </div>
+       </form>
+     <script src="/MisScripts/script_Nabvar.js"></script>
+</body>
+</html>

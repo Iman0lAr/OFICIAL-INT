@@ -1,0 +1,17 @@
+<aside th:fragment="nav_bar" id="sidebar" class="sidebar">
+    <ul>
+        <li><a href="/home"><i class="fas fa-home"></i> Inicio</a></li>
+        <li>
+            <a href="#" id="registro-solicitud-btn">
+                <i class="fas fa-file-alt"></i> Registro de solicitud
+            </a>
+            <ul id="sub-menu" class="hidden">
+                <li><a href="/tramite" target="_self"><i class="fas fa-id-card"></i> Carnet de discapacidad</a></li>
+                <li><a href="/tramitePC" target="_self" ><i class="fas fa-users"></i> Programa contigo</a></li>
+            </ul>
+        </li>
+        <li><a  th:if="${session.uss.tipoUsuario.id_tipo_usuario == 1}" href="/GestionarUsuarios"><i class="fas fa-home"></i>Gestionar usuarios</a></li>
+        <li><a  th:if="${session.uss.tipoUsuario.id_tipo_usuario == 1}" href="/Reportes"><i class="fas fa-chart-line"></i> Reportes</a></li>
+        <li><a href="/Cerrar"><i class="fas fa-sign-out-alt"></i> Cerrar sesión</a></li>
+    </ul>
+</aside>

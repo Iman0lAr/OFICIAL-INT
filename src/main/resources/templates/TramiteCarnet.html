@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+    <html>
+        <head>
+            <title>TODO supply a title</title>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <link rel="stylesheet" href="/css/bootstrap.min.css">
+            <link rel="stylesheet" href="/MisEstilos/EstilosCarnet.css">
+            <link rel="stylesheet" href="/MisEstilos/EstilosNavbar.css">
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+            
+        </head>
+        <body>
+            <header th:replace="~{Componentes/Header::cabezera}" ></header>
+            <aside th:replace="~{Componentes/Nabvar::nav_bar}"></aside>
+
+            <div style="padding-top: 90px" class="contenedor-formulario">
+                <form th:action="@{/tramiteCarnet}" enctype="multipart/form-data" onsubmit="return validarFormulario()" th:object="${formcarnet}" method="post" >    
+                    <div class="titulo-datos">
+                        <h3> Datos de la persona con  discapacidad</h3>
+                    </div>
+                    <div class="contenedor-subformulario  ">
+                        <div class="agrupador-cuadros">
+                            <label>DNI</label>
+                            <input  type="text" id="dni_disc" th:field="*{documentoDeIdentidad.nro_documento}" name="dni">
+                            <span class="val" style="display: none" id="valid_dni_disc" >Campo obligatorio</span>
+                        </div>
+                        <div class="agrupador-cuadros">
+                            <button type="button" onclick="consumir1()" class="boton">
+                                <i class="fas fa-search"></i> Buscar
+                            </button>
+                        </div>
+                        <div class="agrupador-cuadros2">
+                        </div>
+                        <div class="agrupador-cuadros">
+                            <label>Nombres</label>
+                            <input type="text" readonly th:field="*{persona_dis.nombre}" id="nom_disc" name="nombres">
+                    
+                        </div>
+                        <div class="agrupador-cuadros">
+                            <label>Apellido Paterno</label>
+                            <input type="text"  readonly th:field="*{persona_dis.apell_paterno}" id="dis_ape_paterno" name="apellido_paterno">
+                          
+                        </div>
+                        <div class="agrupador-cuadros">
+                            <label>Apellido Materno</label>
+                            <input type="text" readonly th:field="*{persona_dis.apell_materno}" id="dis_ape_materno" name="apellido_materno">
+                           
+                        </div>
+                        <div class="agrupador-cuadros">
+                            <label for="tipo-sexo">Sexo</label>
+                            <input type="text" th:field="*{sexo.nom_sexo}" name="sexo">
+                             
+                        </div>
+                        <div class="agrupador-cuadros" style="width:400px ;display: block;">
+                            <label>Direccion</label>
+                            <input type="text" th:field="*{direccion.calle}"  name="calle">
+                        </div>
+                        <div class="agrupador-cuadros">
+                            <label>Departamento</label>
+                            <input type="text" th:field="*{departamento.nom_departamento}" name="nombres">
+                        </div>
+                        <div class="agrupador-cuadros">
+                            <label>Provincia</label>
+                            <input type="text" th:field="*{provincia.nom_ciudad}" name="provincia">
+                        </div>
+                        <div class="agrupador-cuadros">
+                            <label>Distrito</label>
+                            <input type="text" th:field="*{distrito.nom_distrito}" name="distrito">
+                        </div>
+                        <div class="agrupador-cuadros">
+                            <label>Copia de DNI </label>
+                            <input type="file" name="copiaDniDis" accept="image/*" id="imagen1"  onchange="mostrarImagen(event, 'imagenPrevia1', 'container1')" >
+                            <span class="val" style="display: none" id="valid_copia_disc" >Campo obligatorio</span>
+                        </div>
+                    </div>
+                    <div class="titulo-datos">
+                        <h3> Datos del representante</h3>
+                    </div>
+                      <div class="contenedor-subformulario form-repre " >
+        <div class="agrupador-cuadros">
+            <label >¿Tiene algún representante?</label>
+            <select id="representante" onchange="toggleRepresentante()">
+                <option value="" disabled selected>Seleccione una opción</option>
+                <option value="SI">SI</option>
+                <option value="NO">NO</option>
+            </select>
+        </div>
+
+        <div class="agrupador-cuadros2">
+        </div>
+        <div class="agrupador-cuadros2">
+        </div>
+        <div class="agrupador-cuadros  representante-info" style="display:none;">
+            <label>DNI</label>
+            <input id="dni_repre" type="text"  th:field="*{documentoDeIdentidad_repre.nro_documento}" name="dni">
+        </div>
+        <div class="agrupador-cuadros  representante-info" style="display:none;">
+            <button type="button" onclick="consumir2()" class="boton">
+                <i class="fas fa-search"></i> Buscar
+            </button>
+        </div>
+        <div class="agrupador-cuadros2 representante-info" style="display:none;">
+        </div>
+        <div class="agrupador-cuadros representante-info" style="display:none;">
+            <label>Nombres</label>
+            <input type="text" readonly id="repre_nom" th:field="*{persona_repre.nombre}" name="nombres">
+        </div>
+        <div class="agrupador-cuadros representante-info" style="display:none;">
+            <label>Apellido Paterno</label>
+            <input type="text" readonly id="repre_apll_pat" th:field="*{persona_repre.apell_paterno}" name="apellido_paterno">
+        </div>
+        <div class="agrupador-cuadros representante-info" style="display:none;">
+            <label>Apellido Materno</label>
+            <input type="text" readonly id="repre_apll_mat" th:field="*{persona_repre.apell_materno}" name="apellido_materno">
+        </div>
+        <div class="agrupador-cuadros representante-info" style="display:none;">
+            <label for="tipo-sexo">Sexo</label>
+            <input type="text" th:field="*{sexo_repre.nom_sexo}" name="sexo">
+        </div>
+        <div class="agrupador-cuadros representante-info" style="display:none;" >
+            <label>Direccion</label>
+            <input type="text" th:field="*{direccion_Repre.calle}" name="nombres">
+        </div>
+        <div class="agrupador-cuadros representante-info" style="display:none;">
+            <label>Departamento</label>
+            <input type="text" th:field="*{departamento_Repre.nom_departamento}" name="nombres">
+        </div>
+        <div class="agrupador-cuadros representante-info" style="display:none;">
+            <label>Provincia</label>
+            <input type="text" th:field="*{provincia_Repre.nom_ciudad}" name="nombres">
+        </div>
+        <div class="agrupador-cuadros representante-info" style="display:none;">
+            <label>Distrito</label>
+            <input type="text" th:field="*{distrito_Repre.nom_distrito}" name="nombres">
+        </div>
+        <div class="agrupador-cuadros representante-info" style="display:none;">
+            <label>Copia de DNI del representante</label>
+            <input type="file"  name="copiaDniRepre"  id="imagen2" accept="image/*" onchange="mostrarImagen(event, 'imagenPrevia2', 'container2')">
+        </div>
+    </div>
+
+                    <div class="titulo-datos">
+                        <h3> Datos de  Contacto</h3>
+                    </div>
+                    <div class="contenedor-subformulario">
+
+                        <div class="agrupador-cuadros">
+                            <label>Numero de Telefono</label>
+                            <input id="tel_contacto" type="text" th:field="*{contacto.celular}" name="numero">
+                            <span class="val" style="display: none" id="valid_tel_cont" >Campo obligatorio</span>
+                        </div>
+                        <div class="agrupador-cuadros">
+                            <label>Correo</label>
+                            <input id="correo_contacto" type="text" th:field="*{contacto.correo}" name="correo">
+                            <span class="val" style="display: none" id="valid_correo_cont" >Campo obligatorio</span>
+                        </div>
+                        <div class="agrupador-cuadros2">
+                        </div>
+                        <div class="agrupador-cuadros2">
+                        </div>
+                    </div>
+
+                    <div class="titulo-datos">
+                        <h3>Certificado de Discapacidad</h3>
+                    </div>
+                    <div class="contenedor-subformulario">
+
+                        <div class="agrupador-cuadros">
+                            <label>Numero Certificado</label>
+                            <input id="num_certi" type="text" th:field="*{certificadoDeDiscapacidad.num_certificado}"  name="Numero Certificado">
+                            <span class="val" style="display: none" id="valid_num_cer" >Campo obligatorio</span>
+                        </div>
+                        <div class="agrupador-cuadros">
+                            <label>Fecha de emision</label>
+                            <input id="feche_e" type="date"  th:field="*{certificadoDeDiscapacidad.fecha_emision}"  name="Numero Certificado">
+                            <span class="val" style="display: none" id="valid_Fecha_E" >Campo obligatorio</span>
+                        </div>
+                        <div class="agrupador-cuadros">
+                            <label>Certificado de discapacidad parte 1</label>
+                            <input  type="file" id="imagen3" name="copiaCerPart1" accept="image/*" onchange="mostrarImagen(event, 'imagenPrevia3', 'container3')" >
+                            <span class="val" style="display: none" id="valid_cer1" >Campo obligatorio</span>
+                        </div>
+                        <div class="agrupador-cuadros">
+                            <label>Certificado de discapacidad parte 2</label>
+                            <input  type="file" id="imagen4" name="copiaCerPart2" accept="image/*" onchange="mostrarImagen(event, 'imagenPrevia4', 'container4')" >
+                            <span class="val" style="display: none" id="valid_cer2" >Campo obligatorio</span>
+                        </div>
+                        <div class="agrupador-cuadros">
+                            <label>Imagen de la solicitud</label>
+                            <input  type="file" id="imagen5" name="copiaSolicitud" accept="image/*" onchange="mostrarImagen(event, 'imagenPrevia5', 'container5')" >
+                            <span class="val" style="display: none" id="valid_img_solicitud" >Campo obligatorio</span>
+                        </div>
+                        <div class="agrupador-cuadros2">
+                        </div>
+                        <div class="agrupador-cuadros2">
+                        </div>
+                    </div>
+
+                    <div id="imagenContainer" class="contenedorImágenes">
+                        <div id="container1" class="imagenContainer">
+                            <h4>Copia de Dni(Discapacitado):</h4>
+                            <img id="imagenPrevia1" class="imagenPrevia" />
+                        </div>
+                        <div id="container2" class="imagenContainer">
+                            <h4>Copia de Dni(Representante):</h4>
+                            <img id="imagenPrevia2" class="imagenPrevia" />
+                        </div>
+                        <div id="container3" class="imagenContainer">
+                            <h4>Copia Certificado prt 1:</h4>
+                            <img id="imagenPrevia3" class="imagenPrevia" />
+                        </div>
+                        <div id="container4" class="imagenContainer">
+                            <h4>Copia Certificado prt 2:</h4>
+                            <img id="imagenPrevia4" class="imagenPrevia" />
+                        </div>
+                        <div id="container5" class="imagenContainer">
+                            <h4>Solicitud entregada:</h4>
+                            <img id="imagenPrevia5" class="imagenPrevia" />
+                        </div>
+                    </div>
+
+                    <div class="estilo-btn">
+                        <button type="submit" class="boton btn-guardar">
+                            <i class="fas fa-save"></i> Guardar
+                        </button>
+                        <button type="button" class="boton btn-cancelar">
+                            <i class="fas fa-times"></i> Cancelar
+                        </button>
+
+                    </div>
+                </form>    
+
+            </div>
+            
+            
+            <input id="conf" type="checkbox" th:checked="${confirmacion}" style="display: none;">
+    
+            
+             <!-- Modal -->
+            <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+                aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" id="boton_cierre"></button>
+                        </div>
+                        <div class="modal-body ">
+                            <div
+                                style="width: 100%;display: flex;justify-content: center;align-items: center;margin: 20px;position: relative;left: -20px;">
+                                <img style="width: 200px;" src="/Imagenes/check.jpg" alt=""></div>
+                            <div style="width: 100%;margin: 20px; text-align: center;position: relative;left: -20px;">Guardado
+                                correctamente</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <script src="/MisScripts/script_Nabvar.js"></script>
+            <script src="/MisScripts/script_Carnet.js"></script>
+             
+            <script src="/js/bootstrap.min.js"></script>
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.11.6/umd/popper.min.js"></script>
+             
+ 
+         
+        </body>
+    </html>
